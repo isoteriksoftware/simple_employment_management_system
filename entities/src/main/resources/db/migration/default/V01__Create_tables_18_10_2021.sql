@@ -3,7 +3,7 @@ CREATE TABLE public.admin (
     email character varying(50) NOT NULL UNIQUE,
     password character varying(100) NOT NULL,
     token character varying(100) NOT NULL,
-    CONSTRAINT id_pk PRIMARY KEY (id)
+    CONSTRAINT admin_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE public.employee (
@@ -12,5 +12,5 @@ CREATE TABLE public.employee (
     password character varying(100) NOT NULL,
     token character varying(100) NOT NULL,
     last_attendance_date timestamp with time zone NOT NULL,
-    CONSTRAINT id_pk PRIMARY KEY (id)
+    CONSTRAINT employee_pk PRIMARY KEY (id)
 );
