@@ -1,1 +1,1 @@
-POST    /                           controllers.AdminController.add()
+POST    /admin                           controllers.AdminController.add()
