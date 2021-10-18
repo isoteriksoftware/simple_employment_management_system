@@ -1,11 +1,10 @@
 package com.encentral.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
 
-@Table(name = "employee")
+@Table(name = "admin")
 @Entity
-public class Employee {
+public class JpaAdmin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -19,17 +18,6 @@ public class Employee {
 
     @Column(name = "token", nullable = false, unique = true)
     private String token;
-
-    @Column(name = "last_attendance_date", nullable = true)
-    private Date lastAttendanceDate;
-
-    public Date getLastAttendanceDate() {
-        return lastAttendanceDate;
-    }
-
-    public void setLastAttendanceDate(Date lastAttendanceDate) {
-        this.lastAttendanceDate = lastAttendanceDate;
-    }
 
     public String getToken() {
         return token;
