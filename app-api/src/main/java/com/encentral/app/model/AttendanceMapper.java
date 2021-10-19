@@ -2,6 +2,9 @@ package com.encentral.app.model;
 
 import com.encentral.entities.JpaAttendance;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AttendanceMapper {
     public static Attendance jpaAttendanceToAttendance(JpaAttendance jpaAttendance) {
         Attendance attendance = new Attendance();
@@ -19,5 +22,13 @@ public class AttendanceMapper {
         jpaAttendance.setEmployee(EmployeeMapper.employeeToJpaEmployee(attendance.getEmployee()));
 
         return jpaAttendance;
+    }
+
+    public static List<Attendance> jpaAttendancesToAttendances(List<JpaAttendance> jpaAttendances) {
+        List<Attendance> attendances = new ArrayList<>();
+        for (JpaAttendance jpaAttendance : jpaAttendances)
+            attendances.add(jpaAttendanceToAttendance(jpaAttendance));
+
+        return attendances;
     }
 }

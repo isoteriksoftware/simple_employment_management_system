@@ -8,6 +8,7 @@ import com.encentral.entities.JpaAttendance;
 import play.db.jpa.JPAApi;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 public class AttendanceImpl implements IAttendance {
@@ -27,13 +28,13 @@ public class AttendanceImpl implements IAttendance {
     }
 
     @Override
-    public Optional<Attendance> getAttendance(Employee employee) {
+    public Optional<List<Attendance>> getAttendance(Employee employee) {
         try {
-            JpaAttendance jpaAttendance = jpaApi.withTransaction(em ->
+            List<JpaAttendance> jpaAttendance = jpaApi.withTransaction(em ->
                     em.createQuery("Select a From JpaAttendance a where a.employee_id = :employeeId", JpaAttendance.class)
                             .setParameter("employeeId", employee.getId())
-                            .getSingleResult());
-            return Optional.ofNullable(jpaAttendance).map(AttendanceMapper::jpaAttendanceToAttendance);
+                            .getResultList());
+            return Optional.ofNullable(jpaAttendance).map(AttendanceMapper::jpaAttendancesToAttendances);
         } catch (Exception ignored) {}
 
         return Optional.empty();

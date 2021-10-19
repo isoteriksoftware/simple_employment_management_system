@@ -10,5 +10,7 @@ public interface IEmployee {
 
     Optional<Employee> getEmployee(String email);
 
+    Optional<Employee> getEmployee(int id);
+
     Optional<List<Employee>> getEmployees();
 }

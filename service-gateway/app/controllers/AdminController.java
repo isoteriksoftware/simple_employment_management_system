@@ -1,8 +1,10 @@
 package controllers;
 
 import com.encentral.app.api.IAdmin;
+import com.encentral.app.api.IAttendance;
 import com.encentral.app.api.IEmployee;
 import com.encentral.app.model.Admin;
+import com.encentral.app.model.Attendance;
 import com.encentral.app.model.Employee;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,6 +30,9 @@ public class AdminController extends Controller {
 
     @Inject
     IEmployee iEmployee;
+
+    @Inject
+    IAttendance iAttendance;
 
     @Inject
     FormFactory formFactory;
@@ -163,6 +168,42 @@ public class AdminController extends Controller {
             return notFound("No employee found");
 
         return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(employees.get()));
+    }
+
+    public Result getEmployeeAttendance(String id) throws JsonProcessingException {
+        JsonNode data = request().body().asJson();
+        if (data == null || data.isEmpty())
+            return notFound("No data provided");
+
+        List<String> errors = new ArrayList<>();
+
+        String accessToken = getJSONStringField(data, "access_token");
+        if (accessToken == null || accessToken.isEmpty())
+            errors.add("access_token is required");
+
+        int idInt = -1;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (Exception e) {
+            errors.add("id is invalid");
+        }
+
+        if (!errors.isEmpty())
+            return badRequest(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errors));
+
+        Optional<Admin> admin = iAdmin.getAdminByToken(accessToken);
+        if (admin.isEmpty())
+            return unauthorized("Invalid access_token");
+
+        Optional<Employee> employee = iEmployee.getEmployee(idInt);
+        if (employee.isEmpty())
+            return notFound("No such employee");
+
+        Optional<List<Attendance>> attendances = iAttendance.getAttendance(employee.get());
+        if (attendances.isEmpty())
+            return notFound("No attendance recorded yet");
+
+        return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(attendances.get()));
     }
 }
 
