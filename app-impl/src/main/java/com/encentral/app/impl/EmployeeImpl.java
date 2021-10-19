@@ -68,4 +68,18 @@ public class EmployeeImpl implements IEmployee {
 
         return Optional.empty();
     }
+
+    @Override
+    public boolean removeEmployee(Employee employee) {
+        try {
+            int rows = jpaApi.withTransaction(em ->
+                    em.createQuery("Delete From JpaEmployee where id = :id", JpaEmployee.class)
+                            .setParameter("id", employee.getId())
+                            .executeUpdate());
+
+            return rows == 1;
+        } catch (Exception ignored) {}
+
+        return false;
+    }
 }

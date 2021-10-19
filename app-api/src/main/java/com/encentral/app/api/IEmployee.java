@@ -13,4 +13,6 @@ public interface IEmployee {
     Optional<Employee> getEmployee(int id);
 
     Optional<List<Employee>> getEmployees();
+
+    boolean removeEmployee(Employee employee);
 }
