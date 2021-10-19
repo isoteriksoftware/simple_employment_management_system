@@ -57,6 +57,20 @@ public class EmployeeImpl implements IEmployee {
     }
 
     @Override
+    public Optional<Employee> getEmployeeByToken(String token) {
+        try {
+            JpaEmployee jpaEmployee = jpaApi.withTransaction(em ->
+                    em.createQuery("Select e From JpaEmployee e where e.token = :token", JpaEmployee.class)
+                            .setParameter("token", token)
+                            .getSingleResult());
+
+            return Optional.ofNullable(jpaEmployee).map(EmployeeMapper::jpaEmployeeToEmployee);
+        } catch (Exception ignored) {}
+
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<List<Employee>> getEmployees() {
         try {
             List<JpaEmployee> jpaEmployees = jpaApi.withTransaction(em ->
@@ -75,6 +89,21 @@ public class EmployeeImpl implements IEmployee {
             int rows = jpaApi.withTransaction(em ->
                     em.createQuery("Delete From JpaEmployee where id = :id", JpaEmployee.class)
                             .setParameter("id", employee.getId())
+                            .executeUpdate());
+
+            return rows == 1;
+        } catch (Exception ignored) {}
+
+        return false;
+    }
+
+    @Override
+    public boolean changePassword(Employee employee, String newPassword) {
+        try {
+            int rows = jpaApi.withTransaction(em ->
+                    em.createQuery("Update JpaEmployee Set password = :newPassword where id = :id", JpaEmployee.class)
+                            .setParameter("id", employee.getId())
+                            .setParameter("newPassword", newPassword)
                             .executeUpdate());
 
             return rows == 1;

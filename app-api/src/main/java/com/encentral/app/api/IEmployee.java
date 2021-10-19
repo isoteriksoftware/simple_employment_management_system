@@ -12,7 +12,11 @@ public interface IEmployee {
 
     Optional<Employee> getEmployee(int id);
 
+    Optional<Employee> getEmployeeByToken(String token);
+
     Optional<List<Employee>> getEmployees();
 
     boolean removeEmployee(Employee employee);
+
+    boolean changePassword(Employee employee, String newPassword);
 }
