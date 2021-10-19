@@ -1,5 +1,10 @@
 package com.encentral.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.Objects;
+
+@JsonIgnoreProperties(value = {"password", "token"})
 public class Employee {
     private int id;
     private String email;
@@ -36,5 +41,18 @@ public class Employee {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id && email.equals(employee.email) && password.equals(employee.password) && token.equals(employee.token);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, token);
     }
 }

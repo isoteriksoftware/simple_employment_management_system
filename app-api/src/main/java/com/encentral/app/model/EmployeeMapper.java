@@ -2,6 +2,9 @@ package com.encentral.app.model;
 
 import com.encentral.entities.JpaEmployee;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EmployeeMapper {
     public static JpaEmployee employeeToJpaEmployee(Employee employee) {
         JpaEmployee jpaEmployee = new JpaEmployee();
@@ -19,5 +22,13 @@ public class EmployeeMapper {
         employee.setId(jpaEmployee.getId());
         employee.setToken(jpaEmployee.getToken());
         return employee;
+    }
+
+    public static List<Employee> jpaEmployeesToEmployees(List<JpaEmployee> jpaEmployees) {
+        List<Employee> employees = new ArrayList<>();
+        for (JpaEmployee jpaEmployee : jpaEmployees)
+            employees.add(jpaEmployeeToEmployee(jpaEmployee));
+
+        return employees;
     }
 }

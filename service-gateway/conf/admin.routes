@@ -1,3 +1,4 @@
 POST    /admin                           controllers.AdminController.add()
 POST    /admin/login                     controllers.AdminController.login()
-POST   /admin/employee                  controllers.AdminController.addEmployee()
+POST    /admin/employee                  controllers.AdminController.addEmployee()
+POST    /admin/employee/all              controllers.AdminController.getEmployees()

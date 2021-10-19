@@ -7,6 +7,7 @@ import com.encentral.entities.JpaEmployee;
 import com.google.inject.Inject;
 import play.db.jpa.JPAApi;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +37,19 @@ public class EmployeeImpl implements IEmployee {
                             .getSingleResult());
 
             return Optional.ofNullable(jpaEmployee).map(EmployeeMapper::jpaEmployeeToEmployee);
+        } catch (Exception ignored) {}
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Employee>> getEmployees() {
+        try {
+            List<JpaEmployee> jpaEmployees = jpaApi.withTransaction(em ->
+                    em.createQuery("Select e From JpaEmployee e", JpaEmployee.class)
+                            .getResultList());
+
+            return Optional.ofNullable(jpaEmployees).map(EmployeeMapper::jpaEmployeesToEmployees);
         } catch (Exception ignored) {}
 
         return Optional.empty();

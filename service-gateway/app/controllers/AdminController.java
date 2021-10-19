@@ -89,7 +89,7 @@ public class AdminController extends Controller {
 
         Map<String, String> result = new HashMap<>();
         result.put("access_token", admin.get().getToken());
-        
+
         return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
     }
 
@@ -138,6 +138,31 @@ public class AdminController extends Controller {
         result.put("password", password.toString());
 
         return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+    }
+
+    public Result getEmployees() throws JsonProcessingException {
+        JsonNode data = request().body().asJson();
+        if (data == null || data.isEmpty())
+            return notFound("No data provided");
+
+        List<String> errors = new ArrayList<>();
+
+        String accessToken = getJSONStringField(data, "access_token");
+        if (accessToken == null || accessToken.isEmpty())
+            errors.add("access_token is required");
+
+        if (!errors.isEmpty())
+            return badRequest(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errors));
+
+        Optional<Admin> admin = iAdmin.getAdminByToken(accessToken);
+        if (admin.isEmpty())
+            return unauthorized("Invalid access_token");
+
+        Optional<List<Employee>> employees = iEmployee.getEmployees();
+        if (employees.isEmpty())
+            return notFound("No employee found");
+
+        return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(employees.get()));
     }
 }
 
