@@ -1,7 +1,7 @@
 package com.encentral.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Table(name = "employee")
 @Entity
@@ -20,7 +20,8 @@ public class JpaEmployee {
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 
-    @Column(name = "last_attendance_date", nullable = true)
+    @Column(name = "last_attendance_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastAttendanceDate;
 
     public Date getLastAttendanceDate() {

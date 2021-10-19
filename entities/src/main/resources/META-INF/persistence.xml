@@ -5,7 +5,10 @@
     <class>com.encentral.entities.JpaAdmin</class>
     <class>com.encentral.entities.JpaEmployee</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5433/employee_management"/>
+      <property name="eclipselink.weaving" value="static"/>
+      <property name="javax.persistence.jdbc.user" value="postgres"/>
+      <property name="javax.persistence.jdbc.password" value="adamahama"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5433/employment_system"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
     </properties>
   </persistence-unit>
