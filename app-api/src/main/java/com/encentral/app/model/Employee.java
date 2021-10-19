@@ -1,13 +1,10 @@
 package com.encentral.app.model;
 
-import java.sql.Date;
-
 public class Employee {
     private int id;
     private String email;
     private String password;
     private String token;
-    private Date lastAttendanceDate;
 
     public int getId() {
         return id;
@@ -39,13 +36,5 @@ public class Employee {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public Date getLastAttendanceDate() {
-        return lastAttendanceDate;
-    }
-
-    public void setLastAttendanceDate(Date lastAttendanceDate) {
-        this.lastAttendanceDate = lastAttendanceDate;
     }
 }

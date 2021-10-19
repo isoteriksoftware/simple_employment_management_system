@@ -40,4 +40,18 @@ public class AdminImpl implements IAdmin {
 
         return Optional.empty();
     }
+
+    @Override
+    public Optional<Admin> getAdminByToken(String token) {
+        try {
+            JpaAdmin jpaAdmin = jpaApi.withTransaction(em ->
+                    em.createQuery("Select a From JpaAdmin a where a.token = :token", JpaAdmin.class)
+                            .setParameter("token", token)
+                            .getSingleResult());
+
+            return Optional.ofNullable(jpaAdmin).map(AdminMapper::jpaAdminToAdmin);
+        } catch (Exception ignored) {}
+
+        return Optional.empty();
+    }
 }

@@ -8,4 +8,6 @@ public interface IAdmin {
     Admin addAdmin(Admin admin);
 
     Optional<Admin> getAdmin(String email);
+
+    Optional<Admin> getAdminByToken(String token);
 }

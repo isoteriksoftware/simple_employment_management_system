@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import play.db.jpa.JPAApi;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class EmployeeImpl implements IEmployee {
     private final JPAApi jpaApi;
@@ -20,6 +21,7 @@ public class EmployeeImpl implements IEmployee {
     @Override
     public Employee addEmployee(Employee employee) {
         JpaEmployee jpaEmployee = EmployeeMapper.employeeToJpaEmployee(employee);
+        jpaEmployee.setToken(UUID.randomUUID().toString());
         jpaApi.em().persist(jpaEmployee);
 
         return EmployeeMapper.jpaEmployeeToEmployee(jpaEmployee);

@@ -9,7 +9,6 @@ public class EmployeeMapper {
         jpaEmployee.setPassword(employee.getPassword());
         jpaEmployee.setEmail(employee.getEmail());
         jpaEmployee.setToken(employee.getToken());
-        jpaEmployee.setLastAttendanceDate(employee.getLastAttendanceDate());
         return jpaEmployee;
     }
 
@@ -19,7 +18,6 @@ public class EmployeeMapper {
         employee.setPassword(jpaEmployee.getPassword());
         employee.setId(jpaEmployee.getId());
         employee.setToken(jpaEmployee.getToken());
-        employee.setLastAttendanceDate(employee.getLastAttendanceDate());
         return employee;
     }
 }

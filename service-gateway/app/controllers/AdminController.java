@@ -1,7 +1,9 @@
 package controllers;
 
 import com.encentral.app.api.IAdmin;
+import com.encentral.app.api.IEmployee;
 import com.encentral.app.model.Admin;
+import com.encentral.app.model.Employee;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +15,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.encentral.scaffold.commons.ControllerUtils.getJSONStringField;
 import static com.encentral.scaffold.commons.ControllerUtils.isValidEmail;
@@ -25,6 +25,9 @@ import static com.encentral.scaffold.commons.ControllerUtils.isValidEmail;
 public class AdminController extends Controller {
     @Inject
     IAdmin iAdmin;
+
+    @Inject
+    IEmployee iEmployee;
 
     @Inject
     FormFactory formFactory;
@@ -56,7 +59,6 @@ public class AdminController extends Controller {
     }
 
     @ApiOperation(value = "Login as Admin")
-
     public Result login() throws JsonProcessingException {
         JsonNode data = request().body().asJson();
         if (data == null || data.isEmpty())
@@ -85,7 +87,57 @@ public class AdminController extends Controller {
         if (!admin.get().getPassword().equals(password))
             return unauthorized("Invalid email or password");
 
-        return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(admin.get().getToken()));
+        Map<String, String> result = new HashMap<>();
+        result.put("access_token", admin.get().getToken());
+        
+        return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+    }
+
+    public Result addEmployee() throws JsonProcessingException {
+        JsonNode data = request().body().asJson();
+        if (data == null || data.isEmpty())
+            return notFound("No data provided");
+
+        List<String> errors = new ArrayList<>();
+
+        String accessToken = getJSONStringField(data, "access_token");
+        if (accessToken == null || accessToken.isEmpty())
+            errors.add("access_token is required");
+
+        String email = getJSONStringField(data, "email");
+        if (email == null || email.isEmpty())
+            errors.add("email is required");
+
+        if (email != null && !email.isEmpty()) {
+            if (!isValidEmail(email))
+                errors.add("email is not valid");
+            else if (iEmployee.getEmployee(email).isPresent())
+                errors.add("This email is already registered");
+        }
+
+        if (!errors.isEmpty())
+            return badRequest(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(errors));
+
+        Optional<Admin> admin = iAdmin.getAdminByToken(accessToken);
+        if (admin.isEmpty())
+            return unauthorized("Invalid access_token");
+
+        Random random = new Random();
+        StringBuilder password = new StringBuilder();
+
+        for (int i = 0; i < 4; i++)
+            password.append(random.nextInt(10));
+
+        Employee employee = new Employee();
+        employee.setEmail(email);
+        employee.setPassword(password.toString());
+
+        iEmployee.addEmployee(employee);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("password", password.toString());
+
+        return ok(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
     }
 }
 
