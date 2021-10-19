@@ -26,5 +26,7 @@ public class Module extends AbstractModule implements AkkaGuiceSupport {
 
         install(new AdminModule());
         install(new EmployeeModule());
+
+        bind(AppStart.class).asEagerSingleton();
     }
 }

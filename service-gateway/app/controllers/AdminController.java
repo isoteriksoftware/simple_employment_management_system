@@ -4,13 +4,14 @@ import com.encentral.app.api.IAdmin;
 import com.encentral.app.model.Admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Inject;
 import io.swagger.annotations.*;
 import play.data.Form;
 import play.data.FormFactory;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import javax.inject.Inject;
 
 @Transactional
 @Api(value = "Admin")
