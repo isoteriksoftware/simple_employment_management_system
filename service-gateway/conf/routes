@@ -19,4 +19,5 @@ GET            /error/                                                         c
 GET            /api-docs                                                       controllers.HomeController.api()
 
 
-->             /                                                               admin.Routes
+->             /admin/                                                         admin.Routes
+->             /employee/                                                      employee.Routes
