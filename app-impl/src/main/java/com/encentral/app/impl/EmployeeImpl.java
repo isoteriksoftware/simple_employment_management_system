@@ -27,9 +27,15 @@ public class EmployeeImpl implements IEmployee {
 
     @Override
     public Optional<Employee> getEmployee(String email) {
-        JpaEmployee jpaEmployee = jpaApi.withTransaction(em ->
-                em.createQuery("Select e From JpaEmployee e where email=" + email, JpaEmployee.class).getSingleResult());
+        try {
+            JpaEmployee jpaEmployee = jpaApi.withTransaction(em ->
+                    em.createQuery("Select e From JpaEmployee e where e.email = :email", JpaEmployee.class)
+                            .setParameter("email", email)
+                            .getSingleResult());
 
-        return Optional.ofNullable(jpaEmployee).map(EmployeeMapper::jpaEmployeeToEmployee);
+            return Optional.ofNullable(jpaEmployee).map(EmployeeMapper::jpaEmployeeToEmployee);
+        } catch (Exception ignored) {}
+
+        return Optional.empty();
     }
 }

@@ -29,11 +29,15 @@ public class AdminImpl implements IAdmin {
 
     @Override
     public Optional<Admin> getAdmin(String email) {
-        JpaAdmin jpaAdmin = jpaApi.withTransaction(em ->
-                em.createQuery("Select a From JpaAdmin a where a.email = :email", JpaAdmin.class)
-                        .setParameter("email", email)
-                        .getSingleResult());
+        try {
+            JpaAdmin jpaAdmin = jpaApi.withTransaction(em ->
+                    em.createQuery("Select a From JpaAdmin a where a.email = :email", JpaAdmin.class)
+                            .setParameter("email", email)
+                            .getSingleResult());
 
-        return Optional.ofNullable(jpaAdmin).map(AdminMapper::jpaAdminToAdmin);
+            return Optional.ofNullable(jpaAdmin).map(AdminMapper::jpaAdminToAdmin);
+        } catch (Exception ignored) {}
+
+        return Optional.empty();
     }
 }

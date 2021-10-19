@@ -1,1 +1,2 @@
 POST    /admin                           controllers.AdminController.add()
+POST   /admin/login                      controllers.AdminController.login()
