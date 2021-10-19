@@ -3,7 +3,7 @@ package com.encentral.entities;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name = "employee")
+@Table(name = "employee", schema = "public")
 @Entity
 public class JpaEmployee {
     @Id

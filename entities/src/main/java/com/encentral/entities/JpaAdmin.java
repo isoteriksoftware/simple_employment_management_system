@@ -2,7 +2,7 @@ package com.encentral.entities;
 
 import javax.persistence.*;
 
-@Table(name = "admin")
+@Table(name = "admin", schema = "public")
 @Entity
 public class JpaAdmin {
     @Id
