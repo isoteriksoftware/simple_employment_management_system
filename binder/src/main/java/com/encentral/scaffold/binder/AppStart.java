@@ -12,6 +12,10 @@ public class AppStart {
     @Inject
     public AppStart(JPAApi api, IAdmin iAdmin) {
         api.withTransaction(() -> {
+            // Create a default admin if it doesn't exist yet
+            if (iAdmin.getAdmin("admin@encentral.com").isPresent())
+                return;
+
             Admin admin =  new Admin();
             admin.setEmail("admin@encentral.com");
             admin.setPassword("admin");
